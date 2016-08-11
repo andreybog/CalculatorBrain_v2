@@ -39,21 +39,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    
-    
-    UIButton *sqrtButton = [[UIButton alloc] initWithFrame:
-                            CGRectMake(80, 250, 50, 50)];
-    
-    [sqrtButton setTitle:@"√" forState:UIControlStateNormal];
-    
-    [sqrtButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [sqrtButton addTarget:self
-                   action:@selector(actionTouchOperatorUnary:)
-         forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:sqrtButton];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -93,15 +78,25 @@
     
 }
 
+- (IBAction)actionTouchClear:(UIButton *)sender {
+    
+    self.userStartTyping = NO;
+    self.unaryOperationDidPressed = NO;
+    self.calculator = nil;
+    self.resultLabel.text = @"0";
+    
+}
+
+
 - (void) touchOperator:(NSString *)operator unary:(BOOL) unary {
+    
+    
     
     if ( self.isUserStartTyping ) {
         
-        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-        NSNumber *number = [formatter numberFromString:self.resultLabel.text];
         ABCalculatorOperation operation = [self calculatorOperationWithString: operator];
         
-        float result = [self.calculator executeOpertation:operation withDigit:[number floatValue]];
+        float result = [self.calculator executeOpertation:operation withDigit: [self.resultLabel.text floatValue]];
         
         self.resultLabel.text = [NSString stringWithFormat:@"%g", result];
         
